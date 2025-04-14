@@ -1,0 +1,21 @@
+{
+  "name": "smart-contract-auditor",
+  "version": "0.1.0",
+  "description": "A security auditing tool for Solidity smart contracts",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "audit": "node src/index.js"
+  },
+  "keywords": ["solidity", "security", "audit", "smart-contract", "web3"],
+  "author": "0xLucasRoberts",
+  "license": "MIT",
+  "dependencies": {
+    "@solidity-parser/parser": "^0.14.5",
+    "commander": "^9.4.1",
+    "chalk": "^4.1.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.23.0"
+  }
+}
