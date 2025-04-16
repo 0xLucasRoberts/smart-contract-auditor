@@ -3,6 +3,7 @@
 const { program } = require('commander');
 const chalk = require('chalk');
 const fs = require('fs');
+const SolidityParser = require('./parser');
 
 program
   .name('smart-contract-auditor')
@@ -21,8 +22,25 @@ program
       process.exit(1);
     }
     
-    // TODO: Implement auditing logic
-    console.log(chalk.yellow('Audit functionality coming soon...'));
+    try {
+      const parser = new SolidityParser();
+      const ast = parser.parseFile(file);
+      
+      console.log(chalk.green('✓ Successfully parsed Solidity file'));
+      
+      const contracts = parser.getContracts();
+      console.log(chalk.cyan(`Found ${contracts.length} contract(s):`));
+      
+      contracts.forEach(contract => {
+        console.log(chalk.white(`  - ${contract.name}`));
+        const functions = parser.getFunctions(contract);
+        console.log(chalk.gray(`    Functions: ${functions.length}`));
+      });
+      
+    } catch (error) {
+      console.error(chalk.red('Parse error:'), error.message);
+      process.exit(1);
+    }
   });
 
 program.parse();
