@@ -1,10 +1,12 @@
 const ReentrancyDetector = require('./detectors/reentrancy');
+const OverflowDetector = require('./detectors/overflow');
 
 class ContractAuditor {
   constructor(parser) {
     this.parser = parser;
     this.detectors = [
-      new ReentrancyDetector(parser)
+      new ReentrancyDetector(parser),
+      new OverflowDetector(parser)
     ];
   }
 
