@@ -1,6 +1,7 @@
 const ReentrancyDetector = require('./detectors/reentrancy');
 const OverflowDetector = require('./detectors/overflow');
 const GasOptimizationDetector = require('./detectors/gas');
+const AccessControlDetector = require('./detectors/access');
 
 class ContractAuditor {
   constructor(parser) {
@@ -8,7 +9,8 @@ class ContractAuditor {
     this.detectors = [
       new ReentrancyDetector(parser),
       new OverflowDetector(parser),
-      new GasOptimizationDetector(parser)
+      new GasOptimizationDetector(parser),
+      new AccessControlDetector(parser)
     ];
   }
 
