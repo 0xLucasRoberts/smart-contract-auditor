@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const fs = require('fs');
 const SolidityParser = require('./parser');
 const ContractAuditor = require('./auditor');
+const ConfigManager = require('./config');
 
 program
   .name('smart-contract-auditor')
@@ -14,7 +15,14 @@ program
 program
   .argument('<file>', 'Solidity file to audit')
   .option('-v, --verbose', 'verbose output')
+  .option('-c, --config <path>', 'path to config file')
   .action((file, options) => {
+    const config = new ConfigManager();
+    
+    if (options.config) {
+      // Load specific config file if provided
+      // TODO: implement custom config loading
+    }
     console.log(chalk.blue.bold('Smart Contract Auditor v0.1.0'));
     console.log(chalk.gray('Analyzing contract:', file));
     
@@ -40,7 +48,7 @@ program
 
       console.log('\n' + chalk.blue.bold('Running security audit...'));
       
-      const auditor = new ContractAuditor(parser);
+      const auditor = new ContractAuditor(parser, config);
       const auditResults = auditor.audit();
       
       console.log('\n' + chalk.yellow.bold('AUDIT RESULTS'));
@@ -50,14 +58,23 @@ program
         console.log(chalk.green('✓ No vulnerabilities detected'));
       } else {
         auditResults.vulnerabilities.forEach(vuln => {
-          const color = vuln.severity === 'HIGH' ? chalk.red : 
-                       vuln.severity === 'MEDIUM' ? chalk.yellow : chalk.blue;
-          
-          console.log(color.bold(`[${vuln.severity}] ${vuln.type}`));
-          console.log(chalk.white(`Contract: ${vuln.contract}`));
-          console.log(chalk.white(`Function: ${vuln.function} (line ${vuln.line})`));
-          console.log(chalk.gray(`Description: ${vuln.description}`));
-          console.log('');
+          // Filter by config severity settings
+          if (config.shouldShowSeverity(vuln.severity)) {
+            const useColors = config.useColors();
+            const color = useColors ? (
+              vuln.severity === 'HIGH' ? chalk.red : 
+              vuln.severity === 'MEDIUM' ? chalk.yellow : chalk.blue
+            ) : (x => x);
+            
+            console.log(color.bold(`[${vuln.severity}] ${vuln.type}`));
+            console.log(`Contract: ${vuln.contract}`);
+            console.log(`Function: ${vuln.function} (line ${vuln.line})`);
+            
+            if (config.isVerbose() || options.verbose) {
+              console.log(chalk.gray(`Description: ${vuln.description}`));
+            }
+            console.log('');
+          }
         });
       }
       

@@ -1,0 +1,24 @@
+{
+  "detectors": {
+    "reentrancy": true,
+    "overflow": true,
+    "gas": true,
+    "access": true
+  },
+  "severity": {
+    "high": true,
+    "medium": true,
+    "low": true,
+    "info": true
+  },
+  "output": {
+    "format": "console",
+    "verbose": false,
+    "colors": true
+  },
+  "rules": {
+    "maxLoopIterations": 1000,
+    "warnOnPublicArrays": true,
+    "requireAccessControl": true
+  }
+}
