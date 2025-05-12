@@ -10,7 +10,7 @@ const ConfigManager = require('./config');
 program
   .name('smart-contract-auditor')
   .description('Security auditing tool for Solidity smart contracts')
-  .version('0.1.0');
+  .version('1.0.0');
 
 program
   .argument('<file>', 'Solidity file to audit')
@@ -57,7 +57,7 @@ program
         access: enabledDetectors.includes('access')
       };
     }
-    console.log(chalk.blue.bold('Smart Contract Auditor v0.1.0'));
+    console.log(chalk.blue.bold('Smart Contract Auditor v1.0.0'));
     console.log(chalk.gray('Analyzing contract:', file));
     
     if (!fs.existsSync(file)) {
